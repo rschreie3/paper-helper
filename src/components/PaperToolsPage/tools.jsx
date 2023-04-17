@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import OpenAIAPI from "react-openai-api";
 import { Box } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
 import { Button } from "@mui/material";
@@ -13,18 +12,18 @@ export const Tools = () => {
     setInput(event.target.value);
   }
 
-  function handleDefine() {
-    // <OpenAIAPI
-    //   apiKey="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"
-    //   payload={{
-    //     prompt: "Define " + input,
-    //     maxTokens: 25,
-    //     temperature: 0.2,
-    //     n: 1,
-    //   }}
-    //   responseHandler={() => defineResponseHandler()}
-    // />;
-  }
+  // function handleDefine() {
+  //   <OpenAIAPI
+  //     apiKey="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"
+  //     payload={{
+  //       prompt: "Define " + input,
+  //       maxTokens: 25,
+  //       temperature: 0.2,
+  //       n: 1,
+  //     }}
+  //     responseHandler={() => defineResponseHandler()}
+  //   />;
+  // }
 
   function handleSyn() {}
 
@@ -49,9 +48,9 @@ export const Tools = () => {
       </div>
 
       <div align="center">
-        <Button onClick={handleDefine}>Define</Button>
+        {/* <Button onClick={handleDefine}>Define</Button>
         <Button onClick={handleSyn}>Synonyms</Button>
-        <Button onClick={handleAnt}>Antonyms</Button>
+        <Button onClick={handleAnt}>Antonyms</Button> */}
       </div>
 
       <div align="center">
