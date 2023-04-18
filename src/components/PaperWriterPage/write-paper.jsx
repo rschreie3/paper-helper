@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Button, Stack } from "@mui/material";
 import { Autocomplete, TextField } from "@mui/material";
@@ -7,20 +7,28 @@ import Modal from "./Modal";
 
 export const WritePaper = () => {
   const editorRef = useRef(null);
-  const [dirty, setDirty] = useState(false);
   const { docsState, docsDispatch } = useContext(DocsContext);
-  const [currDoc, setCurrDoc] = useState("");
+  const [currDoc, setCurrDoc] = useState(null);
+  const [currContent, setCurrContent] = useState("");
+  // useEffect(() => setCurrContent(""), []);
+  const [unchanged, setUnchanged] = useState(true);
 
   const save = () => {
-    if (editorRef.current) {
-      const content = editorRef.current.getContent();
-      setDirty(false);
-      editorRef.current.setDirty(false);
+    const newDoc = {
+      label: currDoc.label,
+      content: currContent,
+    };
 
-      //save content
-      console.log(content);
-    }
+    setCurrDoc(newDoc);
+
+    docsDispatch({
+      type: "MODIFY",
+      doc: newDoc,
+    });
+
+    setUnchanged(true);
   };
+
   return (
     <>
       <Editor
@@ -30,9 +38,13 @@ export const WritePaper = () => {
           height: 600,
           // skin: "oxide-dark",
         }}
-        value={currDoc && currDoc.content}
-        onInit={(evt, editor) => (editorRef.current = editor)}
-        onDirty={() => setDirty(true)}
+        initialValue="Select a document..."
+        disabled={!currDoc}
+        value={currContent}
+        onEditorChange={(newValue, editor) => {
+          setCurrContent(newValue);
+          setUnchanged(false);
+        }}
       />
 
       <Stack
@@ -43,16 +55,28 @@ export const WritePaper = () => {
       >
         <Autocomplete
           disablePortal
+          disableClearable
           id="combo-box"
           options={docsState.docs}
           sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Document" />}
+          renderInput={(params) => (
+            <TextField {...params} label="Document" autoFocus />
+          )}
+          onChange={(event, doc) => {
+            setCurrDoc(doc);
+            setCurrContent(doc.content);
+          }}
+          value={currDoc}
         />
 
         <Modal />
 
-        <Button variant="contained" onClick={save} disabled={!dirty}>
-          Save Document
+        <Button
+          variant="contained"
+          onClick={save}
+          disabled={!currDoc || unchanged}
+        >
+          Save
         </Button>
       </Stack>
     </>

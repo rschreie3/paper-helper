@@ -7,8 +7,10 @@ export const docsReducer = (state, action) => {
     }
     case "MODIFY": {
       let newDocs = cloneDeep(state.docs);
-      const updatedDocs = newDocs.filter((x) => !(x.id === action.doc.label));
-      return { docs: updatedDocs };
+      const updatedDocs = newDocs.filter(
+        (x) => !(x.label === action.doc.label)
+      );
+      return { docs: [...updatedDocs, action.doc] };
     }
   }
 };
