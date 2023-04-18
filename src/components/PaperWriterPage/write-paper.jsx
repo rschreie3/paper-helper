@@ -1,12 +1,15 @@
 import React, { useState, useContext, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { Autocomplete, Button, Stack, TextField } from "@mui/material";
+import { Button, Stack } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
+import Modal from "./Modal";
 
 export const WritePaper = () => {
   const editorRef = useRef(null);
   const [dirty, setDirty] = useState(false);
   const { docsState, docsDispatch } = useContext(DocsContext);
+  const [currDoc, setCurrDoc] = useState("");
 
   const save = () => {
     if (editorRef.current) {
@@ -27,33 +30,31 @@ export const WritePaper = () => {
           height: 600,
           // skin: "oxide-dark",
         }}
-        //initialValue={initialValue}
+        value={currDoc && currDoc.content}
         onInit={(evt, editor) => (editorRef.current = editor)}
         onDirty={() => setDirty(true)}
       />
 
       <Stack
-        sx={{ margin: "10px", alignItems: "center" }}
+        sx={{ margin: "10px" }}
+        alignItems="center"
         direction="row"
         spacing={2}
       >
-        <div>
-          <Autocomplete
-            disablePortal
-            id="combo-box"
-            options={docsState}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Document" />}
-          />
-        </div>
-        <div align="right">
-          <Button variant="contained" onClick={save} disabled={!dirty}>
-            Save
-          </Button>
-        </div>
+        <Autocomplete
+          disablePortal
+          id="combo-box"
+          options={docsState.docs}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Document" />}
+        />
+
+        <Modal />
+
+        <Button variant="contained" onClick={save} disabled={!dirty}>
+          Save Document
+        </Button>
       </Stack>
     </>
   );
 };
-
-//   export default WritePaper;

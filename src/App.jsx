@@ -7,6 +7,9 @@ import { WritePaper } from "./components/PaperWriterPage/write-paper";
 import { Tools } from "./components/PaperToolsPage/tools";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+import { useReducer } from "react";
+import { docsReducer } from "./state/docs/docs-reducer.js";
+import { DocsContext } from "./state/docs/docs-context";
 
 const theme = createTheme({
   palette: {
@@ -17,16 +20,27 @@ const theme = createTheme({
 });
 
 function App() {
+  const [docsState, docsDispatch] = useReducer(docsReducer, {
+    docs: [
+      {
+        label: "Default Document",
+        content: "",
+      },
+    ],
+  });
+
   return (
     <HashRouter>
       <ThemeProvider theme={theme}>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/write-paper" element={<WritePaper />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/bibliography" element={<></>} />
-        </Routes>
+        <DocsContext.Provider value={{ docsState, docsDispatch }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/write-paper" element={<WritePaper />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/bibliography" element={<></>} />
+          </Routes>
+        </DocsContext.Provider>
       </ThemeProvider>
     </HashRouter>
   );
