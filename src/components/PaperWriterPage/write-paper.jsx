@@ -48,7 +48,7 @@ export const WritePaper = () => {
       />
 
       <Stack
-        sx={{ margin: "10px" }}
+        sx={{ margin: "5px" }}
         alignItems="center"
         direction="row"
         spacing={2}
