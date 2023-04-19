@@ -63,6 +63,9 @@ export default function BasicModal() {
             placeholder="Enter new document name..."
             onInput={onInput}
             value={input}
+            // sx={{
+            //   width: "350",
+            // }}
           />
           <IconButton onClick={() => addDoc()}>
             <AddIcon />

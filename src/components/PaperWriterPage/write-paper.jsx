@@ -6,7 +6,6 @@ import { DocsContext } from "../../state/docs/docs-context";
 import Modal from "./Modal";
 
 export const WritePaper = () => {
-  const editorRef = useRef(null);
   const { docsState, docsDispatch } = useContext(DocsContext);
   const [currDoc, setCurrDoc] = useState(null);
   const [currContent, setCurrContent] = useState("");
@@ -35,7 +34,7 @@ export const WritePaper = () => {
         apiKey="y4j6negfnxfleke6xmkd8kxfm1uc1s29q21by3tfdhu9nwki"
         plugins="wordcount"
         init={{
-          height: 600,
+          height: 550,
           // skin: "oxide-dark",
         }}
         initialValue="Select a document..."
@@ -48,7 +47,7 @@ export const WritePaper = () => {
       />
 
       <Stack
-        sx={{ margin: "5px" }}
+        sx={{ margin: "10px" }}
         alignItems="center"
         direction="row"
         spacing={2}

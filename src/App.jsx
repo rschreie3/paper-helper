@@ -5,6 +5,7 @@ import { Home } from "./components/HomePage/Home";
 import Header from "./components/header/header.jsx";
 import { WritePaper } from "./components/PaperWriterPage/write-paper";
 import { Tools } from "./components/PaperToolsPage/tools";
+import { BibliographyPage } from "./components/BibliographyPage/BibliographyPage";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { useReducer } from "react";
@@ -38,7 +39,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/write-paper" element={<WritePaper />} />
             <Route path="/tools" element={<Tools />} />
-            <Route path="/bibliography" element={<></>} />
+            <Route path="/bibliography" element={<BibliographyPage />} />
           </Routes>
         </DocsContext.Provider>
       </ThemeProvider>
