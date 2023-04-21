@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Input } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
 // import { useContext } from "react";
+import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 
 const style = {
   position: "absolute",
@@ -26,6 +27,7 @@ export default function BasicModal() {
   const handleClose = () => setOpen(false);
   const [input, setInput] = React.useState("");
   const { docsState, docsDispatch } = React.useContext(DocsContext);
+  const { currDoc, currDocDispatch } = React.useContext(CurrDocContext);
 
   const onInput = (event) => {
     setInput(event.target.value);
@@ -42,6 +44,8 @@ export default function BasicModal() {
       type: "ADD",
       doc: newDoc,
     });
+
+    currDocDispatch({ doc: newDoc });
     setInput("");
     handleClose();
   }
@@ -63,6 +67,11 @@ export default function BasicModal() {
             placeholder="Enter new document name..."
             onInput={onInput}
             value={input}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                addDoc();
+              }
+            }}
             // sx={{
             //   width: "350",
             // }}

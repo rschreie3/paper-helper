@@ -22,12 +22,7 @@ const theme = createTheme({
 
 function App() {
   const [docsState, docsDispatch] = useReducer(docsReducer, {
-    docs: [
-      {
-        label: "Default Document",
-        content: "",
-      },
-    ],
+    docs: [],
   });
 
   return (
