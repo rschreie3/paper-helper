@@ -6,8 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import { Input } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
-// import { useContext } from "react";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
+import { CurrContentContext } from "../../state/currContent/currContent-context";
 
 const style = {
   position: "absolute",
@@ -28,6 +28,8 @@ export default function BasicModal() {
   const [input, setInput] = React.useState("");
   const { docsState, docsDispatch } = React.useContext(DocsContext);
   const { currDoc, currDocDispatch } = React.useContext(CurrDocContext);
+  const { currContent, currContentDispatch } =
+    React.useContext(CurrContentContext);
 
   const onInput = (event) => {
     setInput(event.target.value);
@@ -46,6 +48,7 @@ export default function BasicModal() {
     });
 
     currDocDispatch(newDoc);
+    currContentDispatch(newDoc.content);
     setInput("");
     handleClose();
   }

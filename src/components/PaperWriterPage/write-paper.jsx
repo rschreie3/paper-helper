@@ -58,9 +58,7 @@ export const WritePaper = () => {
           id="combo-box"
           options={docsState.docs}
           sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Document" autoFocus />
-          )}
+          renderInput={(params) => <TextField {...params} label="Document" />}
           onChange={(event, doc) => {
             currDocDispatch(doc);
             currContentDispatch(doc.content);
