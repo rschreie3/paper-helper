@@ -14,21 +14,9 @@ export const Tools = () => {
   }
 
   const createRequest = async (props) => {
-    const apiKey = "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";
+    const apiKey = "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";
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
-
-    // const myPrompt = () => {
-    //   if (props.option === "define") {
-    //     return `Dictionary definition of "${input}"`;
-    //   } else if (props.option === "synonyms") {
-    //     return `Give 10 synonyms for "${input}"`;
-    //   } else if (props.option === "antonyms") {
-    //     return `Give 10 synonyms for "${input}"`;
-    //   } else {
-    //     return `What is 5 + 5`;
-    //   }
-    // };
 
     const prompt =
       props.option === "define"
@@ -36,9 +24,9 @@ export const Tools = () => {
         : props.option === "synonyms"
         ? `Give 10 synonyms for "${input}"`
         : props.option === "antonyms"
-        ? `Give 10 synonyms for "${input}"`
+        ? `Give 10 antonyms for "${input}"`
         : props.option === "sentence"
-        ? `Use "${input}" in a sentence`
+        ? `Use "${input}" in a sentence"`
         : "Give me the infinity symbol";
 
     const response = await fetch(url, {
@@ -57,10 +45,6 @@ export const Tools = () => {
     const definition = data.choices[0].text;
     setResponse(definition);
   };
-
-  function handleSyn() {}
-
-  function handleAnt() {}
 
   return (
     <Box

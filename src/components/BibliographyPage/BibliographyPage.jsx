@@ -1,14 +1,19 @@
 import React, { useState, useContext } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
-import { Stack, Select } from "@mui/material";
+import { Stack } from "@mui/material";
+import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
 import { DocsContext } from "../../state/docs/docs-context";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 
 export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const [currDoc, setCurrDoc] = useState(null);
   const [sources, setSources] = useState([
     {
-      label: "testSource",
       type: "book",
       author: "author",
       title: "title here",
@@ -44,7 +49,47 @@ export const BibliographyPage = () => {
         />
       </Box>
 
-      <Stack></Stack>
+      <Stack direction="row" spacing={1} sx={{ margin: "2vh" }}>
+        <FormControl sx={{ width: "15vh" }}>
+          <InputLabel id="type">Type</InputLabel>
+          <Select
+            labelId="type"
+            // value={}
+            label="Type"
+            //onChange={}
+          >
+            <MenuItem value="Book">Book</MenuItem>
+            <MenuItem value="Article">Article</MenuItem>
+            <MenuItem value="Website">Website</MenuItem>
+          </Select>
+        </FormControl>
+
+        <TextField
+          label="Author"
+          // value={} onChange={(event: React.ChangeEvent<HTMLInputElement>) ={setName(event.target.value);}}
+        />
+
+        <TextField
+          label="Title"
+          // value={} onChange={(event: React.ChangeEvent<HTMLInputElement>) ={setName(event.target.value);}}
+        />
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker />
+        </LocalizationProvider>
+
+        <TextField label="Publisher" />
+
+        <TextField label="Location/URL" />
+
+        <TextField label="Edition/Version" />
+
+        <TextField label="Page Numbers" />
+
+        <IconButton>
+          <AddIcon />
+        </IconButton>
+      </Stack>
     </>
   );
 };
