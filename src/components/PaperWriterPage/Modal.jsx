@@ -45,7 +45,7 @@ export default function BasicModal() {
       doc: newDoc,
     });
 
-    currDocDispatch({ doc: newDoc });
+    currDocDispatch(newDoc);
     setInput("");
     handleClose();
   }

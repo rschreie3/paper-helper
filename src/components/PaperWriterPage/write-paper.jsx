@@ -2,23 +2,21 @@ import React, { useState, useContext, useReducer } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Button, Stack } from "@mui/material";
 import { Autocomplete, TextField } from "@mui/material";
-import { Select, MenuItem, InputLabel } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
-import { CurrDocReducer } from "../../state/currDoc/currDoc-reducer";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
+import { CurrContentContext } from "../../state/currContent/currContent-context";
 import Modal from "./Modal";
 
 export const WritePaper = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
-  const [currContent, setCurrContent] = useState("");
+  const { currDoc, currDocDispatch } = useContext(CurrDocContext);
+  const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
-
-  const [currDoc, currDocDispatch] = useReducer(CurrDocReducer, docsState[0]);
 
   const save = () => {
     const newDoc = {
-      label: currDoc.label,
-      content: currContent,
+      label: currDoc.currDoc.label,
+      content: currContent.currContent,
     };
 
     docsDispatch({
@@ -26,7 +24,7 @@ export const WritePaper = () => {
       doc: newDoc,
     });
 
-    currDocDispatch({ doc: newDoc });
+    currDocDispatch(newDoc);
 
     setUnchanged(true);
   };
@@ -41,10 +39,10 @@ export const WritePaper = () => {
           // skin: "oxide-dark",
         }}
         initialValue='<h1 style="text-align: center;">&nbsp;</h1><p>&nbsp;</p><p>&nbsp;</p><h1 style="text-align: center;">Create a document below to begin</h1>'
-        disabled={!currDoc}
-        value={currContent}
+        disabled={!currDoc.currDoc}
+        value={currContent.currContent}
         onEditorChange={(newValue, editor) => {
-          setCurrContent(newValue);
+          currContentDispatch(newValue);
           setUnchanged(false);
         }}
       />
@@ -64,38 +62,18 @@ export const WritePaper = () => {
             <TextField {...params} label="Document" autoFocus />
           )}
           onChange={(event, doc) => {
-            // setCurrDoc(doc);
-            currDocDispatch({ doc: doc });
-            setCurrContent(doc.content);
+            currDocDispatch(doc);
+            currContentDispatch(doc.content);
           }}
-          value={currDoc && currDoc.label}
+          value={(currDoc.currDoc && currDoc.currDoc) || null}
         />
 
-        {/* <InputLabel id="select-label">Document:</InputLabel>
-        <Select
-          labelId="select-label"
-          value={currDoc}
-          // label="Document"
-          onChange={(event, doc) => {
-            currDocDispatch({ doc: doc });
-            setCurrContent(doc.content);
-          }}
-          sx={{ width: 300 }}
-        >
-          {docsState.docs.map((doc, index) => (
-            <MenuItem key={index} value={doc.conent}>
-              {doc.label}
-            </MenuItem>
-          ))}
-        </Select> */}
+        <Modal />
 
-        <CurrDocContext.Provider value={{ currDoc, currDocDispatch }}>
-          <Modal />
-        </CurrDocContext.Provider>
         <Button
           variant="contained"
           onClick={save}
-          disabled={!currDoc || unchanged}
+          disabled={!currDoc.currDoc || unchanged}
         >
           Save
         </Button>
