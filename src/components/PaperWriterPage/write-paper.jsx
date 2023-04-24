@@ -6,6 +6,7 @@ import { DocsContext } from "../../state/docs/docs-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
 import Modal from "./Modal";
+import Dialog from "./Dialog";
 
 export const WritePaper = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
@@ -66,7 +67,8 @@ export const WritePaper = () => {
           value={(currDoc.currDoc && currDoc.currDoc) || null}
         />
 
-        <Modal />
+        {/* <Modal /> */}
+        <Dialog />
 
         <Button
           variant="contained"

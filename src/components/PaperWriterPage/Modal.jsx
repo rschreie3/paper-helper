@@ -41,7 +41,6 @@ export default function BasicModal() {
       content: "",
     };
 
-    //add to the docsState here...
     docsDispatch({
       type: "ADD",
       doc: newDoc,
@@ -67,6 +66,7 @@ export default function BasicModal() {
       >
         <Box sx={style}>
           <Input
+            autoFocus
             placeholder="Enter new document name..."
             onInput={onInput}
             value={input}
