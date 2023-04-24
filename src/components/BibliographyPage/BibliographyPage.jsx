@@ -17,15 +17,14 @@ export const BibliographyPage = () => {
   const [currDoc, setCurrDoc] = useState(null);
   const [sources, setSources] = useState([
     {
-      type: "Book",
-      author: "Author",
-      title: "title here",
-      pubDate: "",
-      pubName: "or website",
-      pubLocation: "publisher location",
+      type: "",
+      author: "",
+      title: "",
+      pubDate: null,
+      pubName: "",
+      pubLocation: "",
       edition: "",
-      pageNumbers: "pageNums",
-      style: "MLA",
+      pageNumbers: "",
     },
   ]);
   const [currSource, setCurrSource] = useState(sources[0]);
@@ -35,12 +34,11 @@ export const BibliographyPage = () => {
       type: "",
       author: "",
       title: "",
-      pubDate: "",
+      pubDate: null,
       pubName: "",
       pubLocation: "",
       edition: "",
       pageNumbers: "",
-      style: "",
     };
 
     var updatedSources = cloneDeep(sources);
@@ -73,8 +71,6 @@ export const BibliographyPage = () => {
       ? (newSource.edition = props.value)
       : props.attribute == "pageNumbers"
       ? (newSource.pageNumbers = props.value)
-      : props.attribute == "style"
-      ? (newSource.style = props.value)
       : console.log("Unable to change this value as it doesn't exist");
 
     var updatedSources = cloneDeep(sources);
@@ -84,9 +80,12 @@ export const BibliographyPage = () => {
 
   return (
     <>
-      <Box
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        spacing={5}
         sx={{
-          margin: "15px",
+          margin: "5vh",
         }}
       >
         <Autocomplete
@@ -103,11 +102,34 @@ export const BibliographyPage = () => {
           }}
           value={currDoc}
         />
-      </Box>
+
+        <FormControl sx={{ width: "15vh" }}>
+          <InputLabel id="style">Style</InputLabel>
+          <Select
+            labelId="style"
+            label="Style"
+            // value={}
+            // onFocus={() => {
+            //   setCurrSource(source);
+            // }}
+            // onChange={(event) => {
+            //   changeSourceAttributeValue({
+            //     index: index,
+            //     attribute: "style",
+            //     value: event.target.value,
+            //   });
+            // }}
+          >
+            <MenuItem value="MLA">MLA</MenuItem>
+            <MenuItem value="APA">APA</MenuItem>
+            <MenuItem value="Chicago">Chicago</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
 
       {sources.map((source, index) => (
-        <Box key={index}>
-          <Stack direction="row" spacing={1} sx={{ margin: "2vh" }}>
+        <Box key={index} sx={{ margin: "2vh" }}>
+          <Stack direction="row" spacing={1}>
             <FormControl sx={{ width: "15vh" }}>
               <InputLabel id="type">Type</InputLabel>
               <Select
@@ -175,7 +197,7 @@ export const BibliographyPage = () => {
             </LocalizationProvider>
 
             <TextField
-              label="Publisher"
+              label="Publisher/Website"
               value={source.pubName}
               onFocus={() => {
                 setCurrSource(source);
@@ -234,31 +256,8 @@ export const BibliographyPage = () => {
               }}
             />
 
-            <FormControl sx={{ width: "15vh" }}>
-              <InputLabel id="style">Style</InputLabel>
-              <Select
-                labelId="style"
-                label="Style"
-                value={source.style}
-                onFocus={() => {
-                  setCurrSource(source);
-                }}
-                onChange={(event) => {
-                  changeSourceAttributeValue({
-                    index: index,
-                    attribute: "style",
-                    value: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="MLA">MLA</MenuItem>
-                <MenuItem value="APA">APA</MenuItem>
-                <MenuItem value="Chicago">Chicago</MenuItem>
-              </Select>
-            </FormControl>
-
             <IconButton
-              variant="outlined"
+              color="warning"
               onClick={() => {
                 setCurrSource(source);
                 deleteSource({ index: index });
@@ -270,21 +269,21 @@ export const BibliographyPage = () => {
         </Box>
       ))}
 
-      <div align="center">
-        <IconButton size="small" onClick={addSource}>
-          <AddIcon />
-          Add Source
-        </IconButton>
-      </div>
-
-      <div
-        align="center"
-        style={{ bottom: "5vh", right: "5vh", position: "absolute" }}
+      <Stack
+        // direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        sx={{ margin: "5vh" }}
       >
+        <Button variant="outlined" startIcon={<AddIcon />} onClick={addSource}>
+          Add Source
+        </Button>
+
         <Button variant="contained" size="large">
           Create Bibliography
         </Button>
-      </div>
+      </Stack>
     </>
   );
 };
