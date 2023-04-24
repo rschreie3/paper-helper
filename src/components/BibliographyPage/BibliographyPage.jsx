@@ -3,6 +3,7 @@ import { Autocomplete, Box, TextField } from "@mui/material";
 import { Stack } from "@mui/material";
 import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { DocsContext } from "../../state/docs/docs-context";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -75,7 +76,7 @@ export const BibliographyPage = () => {
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker />
+          <DatePicker label="Date Published" />
         </LocalizationProvider>
 
         <TextField label="Publisher" />
@@ -85,6 +86,10 @@ export const BibliographyPage = () => {
         <TextField label="Edition/Version" />
 
         <TextField label="Page Numbers" />
+
+        <IconButton variant="outlined">
+          <DeleteIcon />
+        </IconButton>
 
         <IconButton>
           <AddIcon />
