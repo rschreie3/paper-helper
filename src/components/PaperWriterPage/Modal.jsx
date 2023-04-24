@@ -31,6 +31,13 @@ export default function BasicModal() {
   const { currContent, currContentDispatch } =
     React.useContext(CurrContentContext);
 
+  const inputRef = React.useRef();
+  React.useEffect(() => {
+    if (open) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
+
   const onInput = (event) => {
     setInput(event.target.value);
   };
@@ -53,12 +60,13 @@ export default function BasicModal() {
   }
 
   return (
-    <div>
+    <>
       <Button onClick={handleOpen}>
         <AddIcon />
         New Document
       </Button>
       <Modal
+        // disablePortal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -66,7 +74,7 @@ export default function BasicModal() {
       >
         <Box sx={style}>
           <Input
-            autoFocus
+            inputRef={inputRef}
             placeholder="Enter new document name..."
             onInput={onInput}
             value={input}
@@ -75,15 +83,12 @@ export default function BasicModal() {
                 addDoc();
               }
             }}
-            // sx={{
-            //   width: "350",
-            // }}
           />
           <IconButton onClick={() => addDoc()}>
             <AddIcon />
           </IconButton>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

@@ -67,8 +67,8 @@ export const WritePaper = () => {
           value={(currDoc.currDoc && currDoc.currDoc) || null}
         />
 
-        {/* <Modal /> */}
-        <Dialog />
+        <Modal />
+        {/* <Dialog /> */}
 
         <Button
           variant="contained"
