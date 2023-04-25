@@ -61,8 +61,7 @@ export default function BasicModal() {
 
   return (
     <>
-      <Button onClick={handleOpen}>
-        <AddIcon />
+      <Button onClick={handleOpen} startIcon={<AddIcon />}>
         New Document
       </Button>
       <Modal

@@ -1,18 +1,21 @@
 import React, { useState, useContext, useReducer } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { Autocomplete, TextField } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
 import Modal from "./Modal";
 import Dialog from "./Dialog";
+import { Drawer } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export const WritePaper = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const save = () => {
     const newDoc = {
@@ -32,22 +35,6 @@ export const WritePaper = () => {
 
   return (
     <>
-      <Editor
-        apiKey="y4j6negfnxfleke6xmkd8kxfm1uc1s29q21by3tfdhu9nwki"
-        plugins="wordcount"
-        init={{
-          height: 550,
-          // skin: "oxide-dark",
-        }}
-        initialValue='<h1 style="text-align: center;">&nbsp;</h1><p>&nbsp;</p><p>&nbsp;</p><h1 style="text-align: center;">Create a document below to begin</h1>'
-        disabled={!currDoc.currDoc}
-        value={currContent.currContent}
-        onEditorChange={(newValue, editor) => {
-          currContentDispatch(newValue);
-          setUnchanged(false);
-        }}
-      />
-
       <Stack
         sx={{ margin: "10px" }}
         alignItems="center"
@@ -77,7 +64,33 @@ export const WritePaper = () => {
         >
           Save
         </Button>
+
+        <Button
+          startIcon={<MenuIcon />}
+          onClick={() => setDrawerOpen(true)}
+        ></Button>
+        <Drawer anchor="right" open={drawerOpen}>
+          <Box
+            onClick={() => setDrawerOpen(false)}
+            onKeyDown={() => setDrawerOpen(false)}
+          ></Box>
+        </Drawer>
       </Stack>
+      <Editor
+        apiKey="y4j6negfnxfleke6xmkd8kxfm1uc1s29q21by3tfdhu9nwki"
+        plugins="wordcount"
+        init={{
+          height: 550,
+          // skin: "oxide-dark",
+        }}
+        initialValue='<h1 style="text-align: center;">&nbsp;</h1><p>&nbsp;</p><p>&nbsp;</p><h1 style="text-align: center;">Create a document below to begin</h1>'
+        disabled={!currDoc.currDoc}
+        value={currContent.currContent}
+        onEditorChange={(newValue, editor) => {
+          currContentDispatch(newValue);
+          setUnchanged(false);
+        }}
+      />
     </>
   );
 };
