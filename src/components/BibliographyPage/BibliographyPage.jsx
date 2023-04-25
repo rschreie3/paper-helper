@@ -257,7 +257,6 @@ export const BibliographyPage = () => {
             />
 
             <IconButton
-              color="warning"
               onClick={() => {
                 setCurrSource(source);
                 deleteSource({ index: index });
@@ -280,9 +279,7 @@ export const BibliographyPage = () => {
           Add Source
         </Button>
 
-        <Button variant="contained" size="large">
-          Create Bibliography
-        </Button>
+        <Button variant="contained">Create Bibliography</Button>
       </Stack>
     </>
   );
