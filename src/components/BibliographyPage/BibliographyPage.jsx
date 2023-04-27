@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
 import { cloneDeep } from "lodash";
+import { ApiContext } from "../../state/apiKey/apiKey-context";
 
 export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
@@ -28,6 +29,9 @@ export const BibliographyPage = () => {
     },
   ]);
   const [currSource, setCurrSource] = useState(sources[0]);
+  const [format, setFormat] = useState("MLA");
+  const { apiKey, apiKeyDispatch } = useState(ApiContext);
+  const [stringResponse, setStringResponse] = useState("");
 
   const addSource = () => {
     const newSource = {
@@ -76,6 +80,45 @@ export const BibliographyPage = () => {
     var updatedSources = cloneDeep(sources);
     updatedSources.splice(props.index, 1, newSource);
     setSources(updatedSources);
+    console.log(sources);
+  };
+
+  const createRequest = async () => {
+    console.log("in request");
+    // const apiKey = "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";
+    const url =
+      "https://api.openai.com/v1/engines/text-davinci-003/completions";
+
+    let prompt = `Create a bibliography in "${format}" format with the following sources: `;
+
+    for (let ind = 0; ind < sources.length; ind++) {
+      const source = sources[ind];
+      prompt +=
+        `Source ${ind + 1}: Type: ${source.type} ` +
+        `Author: ${source.author} Title: ${source.title} ` +
+        `Date Published: ${source.pubDate} Publisher/Website: ${source.pubName} ` +
+        `Publisher Location/URL: ${source.pubLocation} Edition: ${source.edition} ` +
+        `Page Numbers: ${source.pageNumbers}`;
+    }
+
+    console.log(prompt);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey.apiKey}`,
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        max_tokens: 4096,
+      }),
+    });
+
+    const data = await response.json();
+    const stringData = data.choices[0].text;
+    setStringResponse(stringData);
+    console.log(stringResponse);
   };
 
   return (
@@ -108,17 +151,10 @@ export const BibliographyPage = () => {
           <Select
             labelId="style"
             label="Style"
-            // value={}
-            // onFocus={() => {
-            //   setCurrSource(source);
-            // }}
-            // onChange={(event) => {
-            //   changeSourceAttributeValue({
-            //     index: index,
-            //     attribute: "style",
-            //     value: event.target.value,
-            //   });
-            // }}
+            value={format}
+            onChange={(event) => {
+              setFormat(event.target.value);
+            }}
           >
             <MenuItem value="MLA">MLA</MenuItem>
             <MenuItem value="APA">APA</MenuItem>
@@ -279,7 +315,9 @@ export const BibliographyPage = () => {
           Add Source
         </Button>
 
-        <Button variant="contained">Create Bibliography</Button>
+        <Button variant="contained" disabled={!currDoc} onClick={createRequest}>
+          Create Bibliography
+        </Button>
       </Stack>
     </>
   );

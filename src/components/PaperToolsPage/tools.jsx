@@ -3,18 +3,19 @@ import { Box } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
+import { ApiContext } from "../../state/apiKey/apiKey-context";
 
 export const Tools = () => {
   const [input, setInput] = useState("");
-  const [results, setResults] = useState("");
   const [response, setResponse] = useState("");
+  const { apiKey, apiKeyDispatch } = useContext(ApiContext);
 
   function onInput(event) {
     setInput(event.target.value);
   }
 
   const createRequest = async (props) => {
-    const apiKey = "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";
+    // const apiKey = "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";
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
@@ -33,7 +34,7 @@ export const Tools = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey.apiKey}`,
       },
       body: JSON.stringify({
         prompt: prompt,
@@ -42,8 +43,8 @@ export const Tools = () => {
     });
 
     const data = await response.json();
-    const definition = data.choices[0].text;
-    setResponse(definition);
+    const stringData = data.choices[0].text;
+    setResponse(stringData);
   };
 
   return (

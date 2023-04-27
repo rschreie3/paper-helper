@@ -69,19 +69,22 @@ export const WritePaper = () => {
           startIcon={<MenuIcon />}
           onClick={() => setDrawerOpen(true)}
         ></Button>
-        <Drawer anchor="right" open={drawerOpen}>
-          <Box
-            onClick={() => setDrawerOpen(false)}
-            onKeyDown={() => setDrawerOpen(false)}
-          ></Box>
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <Box sx={{ width: 250 }} role="presentation"></Box>
         </Drawer>
       </Stack>
+
       <Editor
         apiKey="y4j6negfnxfleke6xmkd8kxfm1uc1s29q21by3tfdhu9nwki"
         plugins="wordcount"
         init={{
           height: 550,
           // skin: "oxide-dark",
+          browser_spellcheck: true,
         }}
         initialValue='<h1 style="text-align: center;">&nbsp;</h1><p>&nbsp;</p><p>&nbsp;</p><h1 style="text-align: center;">Create a document below to begin</h1>'
         disabled={!currDoc.currDoc}
