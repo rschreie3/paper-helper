@@ -30,7 +30,7 @@ export const BibliographyPage = () => {
   ]);
   const [currSource, setCurrSource] = useState(sources[0]);
   const [format, setFormat] = useState("MLA");
-  const { apiKey, apiKeyDispatch } = useState(ApiContext);
+  const { apiKey, apiKeyDispatch } = useContext(ApiContext);
   const [stringResponse, setStringResponse] = useState("");
 
   const addSource = () => {
@@ -80,12 +80,10 @@ export const BibliographyPage = () => {
     var updatedSources = cloneDeep(sources);
     updatedSources.splice(props.index, 1, newSource);
     setSources(updatedSources);
-    console.log(sources);
   };
 
   const createRequest = async () => {
     console.log("in request");
-    // const apiKey = "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";
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
@@ -111,14 +109,15 @@ export const BibliographyPage = () => {
       },
       body: JSON.stringify({
         prompt: prompt,
-        max_tokens: 4096,
+        max_tokens: 2048,
+        temperature: 0,
       }),
     });
 
     const data = await response.json();
     const stringData = data.choices[0].text;
     setStringResponse(stringData);
-    console.log(stringResponse);
+    console.log(stringData);
   };
 
   return (

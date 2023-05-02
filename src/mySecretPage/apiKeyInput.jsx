@@ -6,9 +6,13 @@ export const SecretPage = () => {
   const { apiKey, apiKeyDispatch } = React.useContext(ApiContext);
 
   return (
-    <TextField
-      value={apiKey.apiKey}
-      onChange={(event) => apiKeyDispatch(event.target.value)}
-    />
+    <>
+      <h6>API Key:</h6>
+      <TextField
+        value={apiKey.apiKey}
+        onChange={(event) => apiKeyDispatch(event.target.value)}
+        fullWidth
+      />
+    </>
   );
 };

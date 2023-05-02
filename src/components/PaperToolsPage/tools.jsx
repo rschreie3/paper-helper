@@ -15,7 +15,6 @@ export const Tools = () => {
   }
 
   const createRequest = async (props) => {
-    // const apiKey = "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";
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
@@ -27,7 +26,7 @@ export const Tools = () => {
         : props.option === "antonyms"
         ? `Give 10 antonyms for "${input}"`
         : props.option === "sentence"
-        ? `Use "${input}" in a sentence"`
+        ? `Give 3 sentences with the word "${input}"`
         : "Give me the infinity symbol";
 
     const response = await fetch(url, {
@@ -39,6 +38,7 @@ export const Tools = () => {
       body: JSON.stringify({
         prompt: prompt,
         max_tokens: 100,
+        temperature: 0,
       }),
     });
 
