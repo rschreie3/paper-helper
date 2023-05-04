@@ -86,7 +86,6 @@ export const WritePaper = () => {
           // skin: "oxide-dark",
           browser_spellcheck: true,
         }}
-        initialValue='<h1 style="text-align: center;">&nbsp;</h1><p>&nbsp;</p><p>&nbsp;</p><h1 style="text-align: center;">Create a document below to begin</h1>'
         disabled={!currDoc.currDoc}
         value={currContent.currContent}
         onEditorChange={(newValue, editor) => {

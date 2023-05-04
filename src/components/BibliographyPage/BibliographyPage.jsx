@@ -9,6 +9,9 @@ import { DocsContext } from "../../state/docs/docs-context";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
+import { DateField } from "@mui/x-date-pickers";
+import { YearCalendar } from "@mui/x-date-pickers";
+import { MonthCalendar } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
 import { cloneDeep } from "lodash";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
@@ -215,7 +218,7 @@ export const BibliographyPage = () => {
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateField
                 label="Date Published"
                 value={source.pubDate}
                 onFocus={() => {
@@ -228,6 +231,7 @@ export const BibliographyPage = () => {
                     value: date,
                   });
                 }}
+                format="MM/YYYY"
               />
             </LocalizationProvider>
 
