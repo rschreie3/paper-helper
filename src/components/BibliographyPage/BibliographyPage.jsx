@@ -230,6 +230,7 @@ export const BibliographyPage = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateField
                 label="Date Published"
+                disableFuture
                 value={source.pubDate}
                 onFocus={() => {
                   setCurrSource(source);
