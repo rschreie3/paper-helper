@@ -102,6 +102,8 @@ export const BibliographyPage = () => {
         `Page Numbers: ${source.pageNumbers}`;
     }
 
+    prompt += `give the response with html formatting`;
+
     console.log(prompt);
 
     const response = await fetch(url, {
@@ -163,6 +165,14 @@ export const BibliographyPage = () => {
             <MenuItem value="Chicago">Chicago</MenuItem>
           </Select>
         </FormControl>
+
+        <Button variant="outlined" startIcon={<AddIcon />} onClick={addSource}>
+          Add Source
+        </Button>
+
+        <Button variant="contained" disabled={!currDoc} onClick={createRequest}>
+          Create Bibliography
+        </Button>
       </Stack>
 
       {sources.map((source, index) => (
@@ -306,22 +316,6 @@ export const BibliographyPage = () => {
           </Stack>
         </Box>
       ))}
-
-      <Stack
-        // direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        sx={{ margin: "5vh" }}
-      >
-        <Button variant="outlined" startIcon={<AddIcon />} onClick={addSource}>
-          Add Source
-        </Button>
-
-        <Button variant="contained" disabled={!currDoc} onClick={createRequest}>
-          Create Bibliography
-        </Button>
-      </Stack>
     </>
   );
 };
