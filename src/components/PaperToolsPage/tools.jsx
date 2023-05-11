@@ -89,7 +89,7 @@ export const Tools = () => {
             minWidth: "75vh",
             alignContent: "center",
           }}
-          value={response}
+          value={response.trim()}
         />
       </div>
     </Box>
