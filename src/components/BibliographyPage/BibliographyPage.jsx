@@ -15,10 +15,11 @@ import { MonthCalendar } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
 import { cloneDeep } from "lodash";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
+import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 
 export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
-  const [currDoc, setCurrDoc] = useState(null);
+  const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const [sources, setSources] = useState([
     {
       type: "",
@@ -57,6 +58,19 @@ export const BibliographyPage = () => {
     var updatedSources = cloneDeep(sources);
     updatedSources.splice(props.index, 1);
     setSources(updatedSources);
+  };
+
+  const saveSources = () => {
+    const newDoc = {
+      label: currDoc.currDoc.label,
+      content: currDoc.currDoc.content,
+      sources: sources,
+    };
+
+    docsDispatch({
+      type: "MODIFY",
+      doc: newDoc,
+    });
   };
 
   const changeSourceAttributeValue = (props) => {
@@ -129,50 +143,73 @@ export const BibliographyPage = () => {
     <>
       <Stack
         direction="row"
-        justifyContent="flex-start"
-        spacing={5}
+        justifyContent="space-between"
+        spacing={2}
         sx={{
           margin: "5vh",
         }}
       >
-        <Autocomplete
-          disablePortal
-          disableClearable
-          id="combo-box"
-          options={docsState.docs}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Select a Document..." autoFocus />
-          )}
-          onChange={(event, doc) => {
-            setCurrDoc(doc);
-          }}
-          value={currDoc}
-        />
-
-        <FormControl sx={{ width: "15vh" }}>
-          <InputLabel id="style">Style</InputLabel>
-          <Select
-            labelId="style"
-            label="Style"
-            value={format}
-            onChange={(event) => {
-              setFormat(event.target.value);
+        <Stack direction="row" spacing={2}>
+          <Autocomplete
+            disablePortal
+            disableClearable
+            id="combo-box"
+            options={docsState.docs}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Select a Document..." autoFocus />
+            )}
+            onChange={(event, doc) => {
+              currDocDispatch(doc);
             }}
+            value={currDoc.currDoc}
+          />
+
+          <FormControl sx={{ width: "15vh" }}>
+            <InputLabel id="style">Style</InputLabel>
+            <Select
+              labelId="style"
+              label="Style"
+              value={format}
+              onChange={(event) => {
+                setFormat(event.target.value);
+              }}
+            >
+              <MenuItem value="MLA">MLA</MenuItem>
+              <MenuItem value="APA">APA</MenuItem>
+              <MenuItem value="Chicago">Chicago</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
+
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={addSource}
+            size="small"
           >
-            <MenuItem value="MLA">MLA</MenuItem>
-            <MenuItem value="APA">APA</MenuItem>
-            <MenuItem value="Chicago">Chicago</MenuItem>
-          </Select>
-        </FormControl>
+            Add Source
+          </Button>
 
-        <Button variant="outlined" startIcon={<AddIcon />} onClick={addSource}>
-          Add Source
-        </Button>
+          <Button
+            variant="outlined"
+            onClick={saveSources}
+            disabled={sources.size > 0} //THIS SHOULD BE UPDATED!!!
+            size="small"
+          >
+            Save Sources
+          </Button>
 
-        <Button variant="contained" disabled={!currDoc} onClick={createRequest}>
-          Create Bibliography
-        </Button>
+          <Button
+            variant="contained"
+            disabled={!currDoc.currDoc}
+            onClick={createRequest}
+            size="small"
+          >
+            Create Bibliography
+          </Button>
+        </Stack>
       </Stack>
 
       {sources.map((source, index) => (

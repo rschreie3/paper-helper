@@ -21,6 +21,7 @@ export const WritePaper = () => {
     const newDoc = {
       label: currDoc.currDoc.label,
       content: currContent.currContent,
+      sources: [],
     };
 
     docsDispatch({
