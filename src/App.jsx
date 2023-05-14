@@ -49,14 +49,15 @@ function App() {
   const [sources, sourcesDispatch] = useReducer(sourcesReducer, {
     sources: [
       {
-        type: "Book",
-        author: "Ruti",
-        title: "The Adventures",
+        type: "Article",
+        author: "Mark M. Anderson",
+        title:
+          "The Child Victim as Witness to the Holocaust: An American Story?",
         pubDate: null,
-        pubName: "Schreier",
-        pubLocation: "Brooklyn",
-        edition: "12",
-        pageNumbers: "34",
+        pubName: "Jewish Social Studies",
+        pubLocation: "http://www.jstor.org/stable/40207081",
+        edition: "vo 14 no 1",
+        pageNumbers: "1-22",
       },
     ],
   });

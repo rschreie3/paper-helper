@@ -23,7 +23,6 @@ export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
-  // const [sources, setSources] = useState();
   const { sources, sourcesDispatch } = useContext(SourcesContext);
   const [currSource, setCurrSource] = useState(sources[0]);
   const [format, setFormat] = useState("MLA");
@@ -42,9 +41,6 @@ export const BibliographyPage = () => {
       pageNumbers: "",
     };
 
-    // var updatedSources = cloneDeep(sources);
-    // updatedSources = [...updatedSources, newSource];
-    // setSources(updatedSources);
     sourcesDispatch({
       type: "ADD",
       source: newSource,
@@ -53,9 +49,6 @@ export const BibliographyPage = () => {
   };
 
   const deleteSource = (props) => {
-    // var updatedSources = cloneDeep(sources);
-    // updatedSources.splice(props.index, 1);
-    // setSources(updatedSources);
     sourcesDispatch({
       type: "DELETE",
       source: {},
@@ -99,10 +92,6 @@ export const BibliographyPage = () => {
       ? (newSource.pageNumbers = props.value)
       : console.log("Unable to change this value as it doesn't exist");
 
-    // var updatedSources = cloneDeep(sources);
-    // updatedSources.splice(props.index, 1, newSource);
-    // setSources(updatedSources);
-
     sourcesDispatch({
       type: "MODIFY",
       source: newSource,
@@ -115,7 +104,7 @@ export const BibliographyPage = () => {
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
-    let prompt = `Create a bibliography in ${format} format with the following sources: `;
+    let prompt = `Create a bibliography in ${format} format \n`;
 
     for (let ind = 0; ind < sources.sources.length; ind++) {
       const source = sources.sources[ind];
@@ -124,10 +113,12 @@ export const BibliographyPage = () => {
         `Author: ${source.author} Title: ${source.title} ` +
         `Date Published: ${source.pubDate} Publisher/Website: ${source.pubName} ` +
         `Publisher Location/URL: ${source.pubLocation} Edition: ${source.edition} ` +
-        `Page Numbers: ${source.pageNumbers}`;
+        `Page Numbers: ${source.pageNumbers} \n`;
     }
 
-    prompt += ` give the response with html formatting`;
+    prompt +=
+      ` give the response with html formatting` +
+      "sources should be alphabetized by author's last name";
 
     console.log(prompt);
 
@@ -146,8 +137,6 @@ export const BibliographyPage = () => {
 
     const data = await response.json();
     const stringData = data.choices[0].text;
-    // setStringResponse(stringData);
-    // console.log(stringData);
 
     const newContent = currContent.currContent + "<br />" + stringData;
 
