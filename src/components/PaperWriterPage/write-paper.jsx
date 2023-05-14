@@ -7,21 +7,18 @@ import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
 import Modal from "./Modal";
 import Dialog from "./Dialog";
-import { Drawer } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 
 export const WritePaper = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const save = () => {
     const newDoc = {
       label: currDoc.currDoc.label,
       content: currContent.currContent,
-      sources: [],
+      sources: currDoc.currDoc.sources,
     };
 
     docsDispatch({
@@ -65,18 +62,6 @@ export const WritePaper = () => {
         >
           Save
         </Button>
-
-        <Button
-          startIcon={<MenuIcon />}
-          onClick={() => setDrawerOpen(true)}
-        ></Button>
-        <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <Box sx={{ width: 250 }} role="presentation"></Box>
-        </Drawer>
       </Stack>
 
       <Editor

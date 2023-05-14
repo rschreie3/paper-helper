@@ -16,20 +16,22 @@ import { Button } from "@mui/material";
 import { cloneDeep } from "lodash";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
+import { CurrContentContext } from "../../state/currContent/currContent-context";
 
 export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
+  const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [sources, setSources] = useState([
     {
-      type: "",
-      author: "",
-      title: "",
+      type: "Book",
+      author: "Ruti",
+      title: "The Adventures",
       pubDate: null,
-      pubName: "",
-      pubLocation: "",
-      edition: "",
-      pageNumbers: "",
+      pubName: "Schreier",
+      pubLocation: "Brooklyn",
+      edition: "12",
+      pageNumbers: "34",
     },
   ]);
   const [currSource, setCurrSource] = useState(sources[0]);
@@ -71,6 +73,8 @@ export const BibliographyPage = () => {
       type: "MODIFY",
       doc: newDoc,
     });
+
+    currDocDispatch(newDoc);
   };
 
   const changeSourceAttributeValue = (props) => {
@@ -104,7 +108,7 @@ export const BibliographyPage = () => {
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
-    let prompt = `Create a bibliography in "${format}" format with the following sources: `;
+    let prompt = `Create a bibliography in ${format} format with the following sources: `;
 
     for (let ind = 0; ind < sources.length; ind++) {
       const source = sources[ind];
@@ -116,7 +120,7 @@ export const BibliographyPage = () => {
         `Page Numbers: ${source.pageNumbers}`;
     }
 
-    prompt += `give the response with html formatting`;
+    prompt += ` give the response with html formatting`;
 
     console.log(prompt);
 
@@ -135,8 +139,24 @@ export const BibliographyPage = () => {
 
     const data = await response.json();
     const stringData = data.choices[0].text;
-    setStringResponse(stringData);
-    console.log(stringData);
+    // setStringResponse(stringData);
+    // console.log(stringData);
+
+    const newContent = currContent.currContent + "<br />" + stringData;
+
+    const newDoc = {
+      label: currDoc.currDoc.label,
+      content: newContent,
+      sources: sources,
+    };
+
+    docsDispatch({
+      type: "MODIFY",
+      doc: newDoc,
+    });
+
+    currDocDispatch(newDoc);
+    currContentDispatch(newContent);
   };
 
   return (
@@ -161,8 +181,9 @@ export const BibliographyPage = () => {
             )}
             onChange={(event, doc) => {
               currDocDispatch(doc);
+              currContentDispatch(doc.content);
             }}
-            value={currDoc.currDoc}
+            value={(currDoc.currDoc && currDoc.currDoc) || null}
           />
 
           <FormControl sx={{ width: "15vh" }}>
@@ -195,7 +216,7 @@ export const BibliographyPage = () => {
           <Button
             variant="outlined"
             onClick={saveSources}
-            disabled={sources.size > 0} //THIS SHOULD BE UPDATED!!!
+            disabled={!currDoc.currDoc}
             size="small"
           >
             Save Sources

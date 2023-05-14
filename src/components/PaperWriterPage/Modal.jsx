@@ -46,6 +46,7 @@ export default function BasicModal() {
     const newDoc = {
       label: input,
       content: "",
+      sources: [],
     };
 
     docsDispatch({
