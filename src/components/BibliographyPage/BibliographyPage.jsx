@@ -17,23 +17,14 @@ import { cloneDeep } from "lodash";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
+import { SourcesContext } from "../../state/sources/sources-context";
 
 export const BibliographyPage = () => {
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
-  const [sources, setSources] = useState([
-    {
-      type: "Book",
-      author: "Ruti",
-      title: "The Adventures",
-      pubDate: null,
-      pubName: "Schreier",
-      pubLocation: "Brooklyn",
-      edition: "12",
-      pageNumbers: "34",
-    },
-  ]);
+  // const [sources, setSources] = useState();
+  const { sources, sourcesDispatch } = useContext(SourcesContext);
   const [currSource, setCurrSource] = useState(sources[0]);
   const [format, setFormat] = useState("MLA");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
@@ -51,22 +42,32 @@ export const BibliographyPage = () => {
       pageNumbers: "",
     };
 
-    var updatedSources = cloneDeep(sources);
-    updatedSources = [...updatedSources, newSource];
-    setSources(updatedSources);
+    // var updatedSources = cloneDeep(sources);
+    // updatedSources = [...updatedSources, newSource];
+    // setSources(updatedSources);
+    sourcesDispatch({
+      type: "ADD",
+      source: newSource,
+      index: sources.sources.size,
+    });
   };
 
   const deleteSource = (props) => {
-    var updatedSources = cloneDeep(sources);
-    updatedSources.splice(props.index, 1);
-    setSources(updatedSources);
+    // var updatedSources = cloneDeep(sources);
+    // updatedSources.splice(props.index, 1);
+    // setSources(updatedSources);
+    sourcesDispatch({
+      type: "DELETE",
+      source: {},
+      index: props.index,
+    });
   };
 
   const saveSources = () => {
     const newDoc = {
       label: currDoc.currDoc.label,
       content: currDoc.currDoc.content,
-      sources: sources,
+      sources: sources.sources,
     };
 
     docsDispatch({
@@ -98,9 +99,15 @@ export const BibliographyPage = () => {
       ? (newSource.pageNumbers = props.value)
       : console.log("Unable to change this value as it doesn't exist");
 
-    var updatedSources = cloneDeep(sources);
-    updatedSources.splice(props.index, 1, newSource);
-    setSources(updatedSources);
+    // var updatedSources = cloneDeep(sources);
+    // updatedSources.splice(props.index, 1, newSource);
+    // setSources(updatedSources);
+
+    sourcesDispatch({
+      type: "MODIFY",
+      source: newSource,
+      index: props.index,
+    });
   };
 
   const createRequest = async () => {
@@ -110,8 +117,8 @@ export const BibliographyPage = () => {
 
     let prompt = `Create a bibliography in ${format} format with the following sources: `;
 
-    for (let ind = 0; ind < sources.length; ind++) {
-      const source = sources[ind];
+    for (let ind = 0; ind < sources.sources.length; ind++) {
+      const source = sources.sources[ind];
       prompt +=
         `Source ${ind + 1}: Type: ${source.type} ` +
         `Author: ${source.author} Title: ${source.title} ` +
@@ -147,7 +154,7 @@ export const BibliographyPage = () => {
     const newDoc = {
       label: currDoc.currDoc.label,
       content: newContent,
-      sources: sources,
+      sources: sources.sources,
     };
 
     docsDispatch({
@@ -233,7 +240,7 @@ export const BibliographyPage = () => {
         </Stack>
       </Stack>
 
-      {sources.map((source, index) => (
+      {sources.sources.map((source, index) => (
         <Box key={index} sx={{ margin: "2vh" }}>
           <Stack direction="row" spacing={1}>
             <FormControl sx={{ width: "15vh" }}>
