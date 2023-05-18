@@ -16,5 +16,8 @@ export const sourcesReducer = (state, action) => {
       updatedSources.splice(action.index, 1);
       return { sources: updatedSources };
     }
+    case "SWITCHDOC": {
+      return { sources: action.sourceList };
+    }
   }
 };

@@ -29,6 +29,22 @@ export const BibliographyPage = () => {
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
   const [stringResponse, setStringResponse] = useState("");
 
+  const singleSourceList = [
+    [
+      {
+        type: "Article",
+        author: "Mark M. Anderson",
+        title:
+          "The Child Victim as Witness to the Holocaust: An American Story?",
+        pubDate: null,
+        pubName: "Jewish Social Studies",
+        pubLocation: "http://www.jstor.org/stable/40207081",
+        edition: "vo 14 no 1",
+        pageNumbers: "1-22",
+      },
+    ],
+  ];
+
   const addSource = () => {
     const newSource = {
       type: "",
@@ -178,6 +194,11 @@ export const BibliographyPage = () => {
             onChange={(event, doc) => {
               currDocDispatch(doc);
               currContentDispatch(doc.content);
+              sourcesDispatch({
+                type: "SWITCHDOC",
+                sourceList:
+                  doc.sources.length > 0 ? doc.sources : singleSourceList,
+              });
             }}
             value={(currDoc.currDoc && currDoc.currDoc) || null}
           />
