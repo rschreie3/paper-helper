@@ -152,6 +152,9 @@ export const BibliographyPage = () => {
     const data = await response.json();
     const stringData = data.choices[0].text;
 
+    // const split = currContent.currContent.split("Bibliography");
+    // const oldBibRemoved = split[0];
+
     const newContent = currContent.currContent + "<br />" + stringData;
 
     const newDoc = {
