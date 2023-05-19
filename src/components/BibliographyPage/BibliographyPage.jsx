@@ -120,7 +120,7 @@ export const BibliographyPage = () => {
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
-    let prompt = `Create a bibliography in ${format} format \n`;
+    let prompt = `Create a bibliography with the following sources: \n`;
 
     for (let ind = 0; ind < sources.sources.length; ind++) {
       const source = sources.sources[ind];
@@ -132,9 +132,7 @@ export const BibliographyPage = () => {
         `Page Numbers: ${source.pageNumbers} \n`;
     }
 
-    prompt +=
-      ` give the response with html formatting` +
-      "sources should be alphabetized by author's last name";
+    prompt += ` format according to the ${format} format using html styling tags`;
 
     console.log(prompt);
 
