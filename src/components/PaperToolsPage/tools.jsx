@@ -4,8 +4,18 @@ import { OutlinedInput } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
 
 export const Tools = () => {
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
+
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
@@ -18,15 +28,15 @@ export const Tools = () => {
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
-    const prompt =
+    let prompt =
       props.option === "define"
-        ? `Dictionary definition of "${input}"`
+        ? `Dictionary definition of "${input}", use html formatting`
         : props.option === "synonyms"
-        ? `Give 10 synonyms for "${input}"`
+        ? `Give 10 synonyms for "${input}", use html formatting to display as a bulleted list`
         : props.option === "antonyms"
-        ? `Give 10 antonyms for "${input}"`
+        ? `Give 10 antonyms for "${input}", use html formatting to display as a bulleted list`
         : props.option === "sentence"
-        ? `Give 3 sentences with the word "${input}"`
+        ? `Give 3 sentences with the word "${input}", use html formatting to display as a bulleted list and to bold the word ${input}`
         : "Give me the infinity symbol";
 
     const response = await fetch(url, {
@@ -37,7 +47,7 @@ export const Tools = () => {
       },
       body: JSON.stringify({
         prompt: prompt,
-        max_tokens: 100,
+        max_tokens: 1024,
         temperature: 0,
       }),
     });
@@ -80,18 +90,26 @@ export const Tools = () => {
         </Button>
       </div>
 
-      <div align="center">
-        <TextField
-          multiline
-          minRows={8}
-          sx={{
-            margin: 4,
-            minWidth: "75vh",
-            alignContent: "center",
-          }}
-          value={response.trim()}
-        />
-      </div>
+      <Box
+        sx={{
+          minHeight: 350,
+          maxWidth: 500,
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: 7,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: 2,
+          borderColor: "#008b8b",
+          borderRadius: 2,
+          padding: 2,
+        }}
+      >
+        {/* <Item> */}
+        <div dangerouslySetInnerHTML={{ __html: response.trim() }} />
+        {/* </Item> */}
+      </Box>
     </Box>
   );
 };
