@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/paper-helper/static/css/main.47de9d8d.css",
-    "main.js": "/paper-helper/static/js/main.e2438571.js",
+    "main.js": "/paper-helper/static/js/main.d8efb86c.js",
     "static/js/787.1a8c8fa7.chunk.js": "/paper-helper/static/js/787.1a8c8fa7.chunk.js",
     "static/media/logo.svg": "/paper-helper/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/paper-helper/index.html",
     "main.47de9d8d.css.map": "/paper-helper/static/css/main.47de9d8d.css.map",
-    "main.e2438571.js.map": "/paper-helper/static/js/main.e2438571.js.map",
+    "main.d8efb86c.js.map": "/paper-helper/static/js/main.d8efb86c.js.map",
     "787.1a8c8fa7.chunk.js.map": "/paper-helper/static/js/787.1a8c8fa7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.47de9d8d.css",
-    "static/js/main.e2438571.js"
+    "static/js/main.d8efb86c.js"
   ]
 }
