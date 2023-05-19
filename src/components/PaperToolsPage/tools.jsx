@@ -4,24 +4,20 @@ import { OutlinedInput } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
+import { ToolsContentContext } from "../../state/toolsPage/tools-content-context";
 
 export const Tools = () => {
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
-
+  const { toolsContent, toolsContentDispatch } =
+    useContext(ToolsContentContext);
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
 
   function onInput(event) {
-    setInput(event.target.value);
+    toolsContentDispatch({
+      type: "INPUT",
+      input: event.target.value,
+    });
   }
 
   const createRequest = async (props) => {
@@ -30,13 +26,13 @@ export const Tools = () => {
 
     let prompt =
       props.option === "define"
-        ? `Dictionary definition of "${input}", use html formatting`
+        ? `Dictionary definition of "${toolsContent.input}", use html formatting`
         : props.option === "synonyms"
-        ? `Give 10 synonyms for "${input}", use html formatting to display as a bulleted list`
+        ? `Give 10 synonyms for "${toolsContent.input}", use html formatting to display as a bulleted list`
         : props.option === "antonyms"
-        ? `Give 10 antonyms for "${input}", use html formatting to display as a bulleted list`
+        ? `Give 10 antonyms for "${toolsContent.input}", use html formatting to display as a bulleted list`
         : props.option === "sentence"
-        ? `Give 3 sentences with the word "${input}", use html formatting to display as a bulleted list and to bold the word ${input}`
+        ? `Give 3 sentences with the word "${toolsContent.input}", use html formatting to display as a bulleted list and to bold the word ${toolsContent.input}`
         : "Give me the infinity symbol";
 
     const response = await fetch(url, {
@@ -54,7 +50,11 @@ export const Tools = () => {
 
     const data = await response.json();
     const stringData = data.choices[0].text;
-    setResponse(stringData);
+    // setResponse(stringData);
+    toolsContentDispatch({
+      type: "RESPONSE",
+      response: stringData,
+    });
   };
 
   return (
@@ -107,7 +107,9 @@ export const Tools = () => {
         }}
       >
         {/* <Item> */}
-        <div dangerouslySetInnerHTML={{ __html: response.trim() }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: toolsContent.response.trim() }}
+        />
         {/* </Item> */}
       </Box>
     </Box>

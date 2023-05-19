@@ -20,6 +20,8 @@ import { apiKeyReducer } from "./state/apiKey/apiKey-reducer";
 import { ApiContext } from "./state/apiKey/apiKey-context";
 import { sourcesReducer } from "./state/sources/sources-reducer";
 import { SourcesContext } from "./state/sources/sources-context";
+import { toolsContentReducer } from "./state/toolsPage/tools-content-reducer";
+import { ToolsContentContext } from "./state/toolsPage/tools-content-context";
 
 const theme = createTheme({
   palette: {
@@ -62,6 +64,11 @@ function App() {
     ],
   });
 
+  const [toolsContent, toolsContentDispatch] = useReducer(toolsContentReducer, {
+    input: "",
+    response: "",
+  });
+
   return (
     <HashRouter>
       <ThemeProvider theme={theme}>
@@ -73,16 +80,20 @@ function App() {
             >
               <ApiContext.Provider value={{ apiKey, apiKeyDispatch }}>
                 <SourcesContext.Provider value={{ sources, sourcesDispatch }}>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/write-paper" element={<WritePaper />} />
-                    <Route path="/tools" element={<Tools />} />
-                    <Route
-                      path="/bibliography"
-                      element={<BibliographyPage />}
-                    />
-                    <Route path="/secret-page" element={<SecretPage />} />
-                  </Routes>
+                  <ToolsContentContext.Provider
+                    value={{ toolsContent, toolsContentDispatch }}
+                  >
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/write-paper" element={<WritePaper />} />
+                      <Route path="/tools" element={<Tools />} />
+                      <Route
+                        path="/bibliography"
+                        element={<BibliographyPage />}
+                      />
+                      <Route path="/secret-page" element={<SecretPage />} />
+                    </Routes>
+                  </ToolsContentContext.Provider>
                 </SourcesContext.Provider>
               </ApiContext.Provider>
             </CurrContentContext.Provider>
