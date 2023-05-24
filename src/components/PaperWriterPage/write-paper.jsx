@@ -5,14 +5,37 @@ import { Autocomplete, TextField } from "@mui/material";
 import { DocsContext } from "../../state/docs/docs-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
-import Modal from "./Modal";
-import Dialog from "./Dialog";
+import { OutlinedInput } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 
 export const WritePaper = () => {
+  const [input, setInput] = useState("");
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
+
+  const onInput = (event) => {
+    setInput(event.target.value);
+  };
+
+  function addDoc() {
+    const newDoc = {
+      label: input,
+      content: "",
+      sources: [],
+    };
+
+    docsDispatch({
+      type: "ADD",
+      doc: newDoc,
+    });
+
+    currDocDispatch(newDoc);
+    currContentDispatch(newDoc.content);
+    setInput("");
+  }
 
   const save = () => {
     const newDoc = {
@@ -52,8 +75,19 @@ export const WritePaper = () => {
           value={(currDoc.currDoc && currDoc.currDoc) || null}
         />
 
-        <Modal />
-        {/* <Dialog /> */}
+        <OutlinedInput
+          placeholder="Enter new document name..."
+          onInput={onInput}
+          value={input}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              addDoc();
+            }
+          }}
+        />
+        <IconButton onClick={() => addDoc()}>
+          <AddIcon />
+        </IconButton>
 
         <Button
           variant="contained"
