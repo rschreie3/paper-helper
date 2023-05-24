@@ -63,7 +63,6 @@ export const Tools = () => {
     >
       <div align="center">
         <OutlinedInput
-          multiline
           placeholder="Enter text here..."
           onInput={onInput}
           sx={{

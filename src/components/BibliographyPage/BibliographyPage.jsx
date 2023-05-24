@@ -22,10 +22,10 @@ export const BibliographyPage = () => {
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const { sources, sourcesDispatch } = useContext(SourcesContext);
-  const [currSource, setCurrSource] = useState(sources[0]);
+  const [currSource, setCurrSource] = useState(sources.sources[0]);
   const [format, setFormat] = useState("MLA");
-  const { apiKey, apiKeyDispatch } = useContext(ApiContext);
-  const [sourcesSaved, setSourcesSaved] = useState("false");
+  const { apiKey } = useContext(ApiContext);
+  const [sourcesSaved, setSourcesSaved] = useState(false);
 
   const singleSourceList = [
     [

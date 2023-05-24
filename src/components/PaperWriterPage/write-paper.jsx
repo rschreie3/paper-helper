@@ -8,6 +8,7 @@ import { CurrContentContext } from "../../state/currContent/currContent-context"
 import { OutlinedInput } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
+import { SourcesContext } from "../../state/sources/sources-context";
 
 export const WritePaper = () => {
   const [input, setInput] = useState("");
@@ -15,6 +16,7 @@ export const WritePaper = () => {
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
+  const { sources, sourcesDispatch } = useContext(SourcesContext);
 
   const onInput = (event) => {
     setInput(event.target.value);
@@ -54,6 +56,21 @@ export const WritePaper = () => {
     setUnchanged(true);
   };
 
+  const singleSourceList = [
+    [
+      {
+        type: "",
+        author: "",
+        title: "",
+        pubDate: null,
+        pubName: "",
+        pubLocation: "",
+        edition: "",
+        pageNumbers: "",
+      },
+    ],
+  ];
+
   return (
     <>
       <Stack
@@ -71,12 +88,18 @@ export const WritePaper = () => {
           onChange={(event, doc) => {
             currDocDispatch(doc);
             currContentDispatch(doc.content);
+            sourcesDispatch({
+              type: "SWITCHDOC",
+              sourceList:
+                doc.sources.length > 0 ? doc.sources : singleSourceList,
+            });
           }}
           value={(currDoc.currDoc && currDoc.currDoc) || null}
         />
 
         <OutlinedInput
           placeholder="Enter new document name..."
+          autoFocus
           onInput={onInput}
           value={input}
           onKeyPress={(event) => {
