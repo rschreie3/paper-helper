@@ -15,8 +15,7 @@ import ArticleSharpIcon from "@mui/icons-material/ArticleSharp";
 import { useNavigate } from "react-router-dom";
 
 const pages = [
-  { name: "Home", path: "/" },
-  { name: "Write Paper", path: "/write-paper" },
+  { name: "Write Paper", path: "/" },
   { name: "Tools", path: "/tools" },
   { name: "Bibliography", path: "/bibliography" },
 ];

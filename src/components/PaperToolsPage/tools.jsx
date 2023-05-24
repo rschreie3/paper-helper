@@ -9,8 +9,6 @@ import { ToolsContentContext } from "../../state/toolsPage/tools-content-context
 export const Tools = () => {
   const { toolsContent, toolsContentDispatch } =
     useContext(ToolsContentContext);
-  const [input, setInput] = useState("");
-  const [response, setResponse] = useState("");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
 
   function onInput(event) {
@@ -50,7 +48,6 @@ export const Tools = () => {
 
     const data = await response.json();
     const stringData = data.choices[0].text;
-    // setResponse(stringData);
     toolsContentDispatch({
       type: "RESPONSE",
       response: stringData,
@@ -106,11 +103,9 @@ export const Tools = () => {
           padding: 2,
         }}
       >
-        {/* <Item> */}
         <div
           dangerouslySetInnerHTML={{ __html: toolsContent.response.trim() }}
         />
-        {/* </Item> */}
       </Box>
     </Box>
   );
