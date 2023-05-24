@@ -8,10 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import { DocsContext } from "../../state/docs/docs-context";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers";
 import { DateField } from "@mui/x-date-pickers";
-import { YearCalendar } from "@mui/x-date-pickers";
-import { MonthCalendar } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
 import { cloneDeep } from "lodash";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
@@ -27,20 +24,18 @@ export const BibliographyPage = () => {
   const [currSource, setCurrSource] = useState(sources[0]);
   const [format, setFormat] = useState("MLA");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
-  const [stringResponse, setStringResponse] = useState("");
 
   const singleSourceList = [
     [
       {
-        type: "Article",
-        author: "Mark M. Anderson",
-        title:
-          "The Child Victim as Witness to the Holocaust: An American Story?",
+        type: "",
+        author: "",
+        title: "",
         pubDate: null,
-        pubName: "Jewish Social Studies",
-        pubLocation: "http://www.jstor.org/stable/40207081",
-        edition: "vo 14 no 1",
-        pageNumbers: "1-22",
+        pubName: "",
+        pubLocation: "",
+        edition: "",
+        pageNumbers: "",
       },
     ],
   ];
@@ -115,7 +110,7 @@ export const BibliographyPage = () => {
     });
   };
 
-  const createRequest = async () => {
+  const onCreateClicked = async () => {
     console.log("in request");
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
@@ -228,7 +223,7 @@ export const BibliographyPage = () => {
             onClick={addSource}
             size="small"
           >
-            Add Source
+            Add
           </Button>
 
           <Button
@@ -237,13 +232,13 @@ export const BibliographyPage = () => {
             disabled={!currDoc.currDoc}
             size="small"
           >
-            Save Sources
+            Save
           </Button>
 
           <Button
             variant="contained"
             disabled={!currDoc.currDoc}
-            onClick={createRequest}
+            onClick={onCreateClicked}
             size="small"
           >
             Create Bibliography
