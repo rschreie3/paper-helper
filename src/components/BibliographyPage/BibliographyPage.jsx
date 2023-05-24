@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 import { Stack } from "@mui/material";
+import { Divider } from "@mui/material";
 import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,6 +25,7 @@ export const BibliographyPage = () => {
   const [currSource, setCurrSource] = useState(sources[0]);
   const [format, setFormat] = useState("MLA");
   const { apiKey, apiKeyDispatch } = useContext(ApiContext);
+  const [sourcesSaved, setSourcesSaved] = useState("false");
 
   const singleSourceList = [
     [
@@ -57,6 +59,7 @@ export const BibliographyPage = () => {
       source: newSource,
       index: sources.sources.size,
     });
+    setSourcesSaved(false);
   };
 
   const deleteSource = (props) => {
@@ -65,6 +68,7 @@ export const BibliographyPage = () => {
       source: {},
       index: props.index,
     });
+    setSourcesSaved(false);
   };
 
   const saveSources = () => {
@@ -80,6 +84,7 @@ export const BibliographyPage = () => {
     });
 
     currDocDispatch(newDoc);
+    setSourcesSaved(true);
   };
 
   const changeSourceAttributeValue = (props) => {
@@ -111,7 +116,6 @@ export const BibliographyPage = () => {
   };
 
   const onCreateClicked = async () => {
-    console.log("in request");
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
@@ -171,11 +175,13 @@ export const BibliographyPage = () => {
     <>
       <Stack
         direction="row"
-        justifyContent="space-between"
+        // justifyContent="space-between"
+        alignItems="center"
         spacing={2}
         sx={{
-          margin: "5vh",
+          margin: 5,
         }}
+        divider={<Divider orientation="vertical" flexItem />}
       >
         <Stack direction="row" spacing={2}>
           <Autocomplete
@@ -216,12 +222,11 @@ export const BibliographyPage = () => {
           </FormControl>
         </Stack>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Button
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={addSource}
-            size="small"
           >
             Add
           </Button>
@@ -230,18 +235,16 @@ export const BibliographyPage = () => {
             variant="outlined"
             onClick={saveSources}
             disabled={!currDoc.currDoc}
-            size="small"
           >
             Save
           </Button>
 
           <Button
             variant="contained"
-            disabled={!currDoc.currDoc}
+            disabled={!currDoc.currDoc || !sourcesSaved}
             onClick={onCreateClicked}
-            size="small"
           >
-            Create Bibliography
+            Create
           </Button>
         </Stack>
       </Stack>
