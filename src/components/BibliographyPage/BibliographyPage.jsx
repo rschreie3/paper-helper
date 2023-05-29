@@ -18,29 +18,26 @@ import { CurrContentContext } from "../../state/currContent/currContent-context"
 import { SourcesContext } from "../../state/sources/sources-context";
 
 export const BibliographyPage = () => {
+  const singleSourceList = [
+    {
+      type: "",
+      author: "",
+      title: "",
+      pubDate: null,
+      pubName: "",
+      pubLocation: "",
+      edition: "",
+      pageNumbers: "",
+    },
+  ];
+
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const { sources, sourcesDispatch } = useContext(SourcesContext);
-  const [currSource, setCurrSource] = useState(sources.sources[0]);
+  const [sourcesSaved, setSourcesSaved] = useState(false);
   const [format, setFormat] = useState("MLA");
   const { apiKey } = useContext(ApiContext);
-  const [sourcesSaved, setSourcesSaved] = useState(false);
-
-  const singleSourceList = [
-    [
-      {
-        type: "",
-        author: "",
-        title: "",
-        pubDate: null,
-        pubName: "",
-        pubLocation: "",
-        edition: "",
-        pageNumbers: "",
-      },
-    ],
-  ];
 
   const addSource = () => {
     const newSource = {
@@ -88,7 +85,7 @@ export const BibliographyPage = () => {
   };
 
   const changeSourceAttributeValue = (props) => {
-    var newSource = cloneDeep(currSource);
+    var newSource = cloneDeep(sources.currSource);
 
     props.attribute == "type"
       ? (newSource.type = props.value)
@@ -124,7 +121,7 @@ export const BibliographyPage = () => {
     for (let ind = 0; ind < sources.sources.length; ind++) {
       const source = sources.sources[ind];
       prompt +=
-        `Source ${ind + 1}: Type: ${source.type} ` +
+        `${source.type} ` +
         `Author: ${source.author} Title: ${source.title} ` +
         `Date Published: ${source.pubDate} Publisher/Website: ${source.pubName} ` +
         `Publisher Location/URL: ${source.pubLocation} Edition: ${source.edition} ` +
@@ -175,7 +172,6 @@ export const BibliographyPage = () => {
     <>
       <Stack
         direction="row"
-        // justifyContent="space-between"
         alignItems="center"
         spacing={2}
         sx={{
@@ -199,7 +195,16 @@ export const BibliographyPage = () => {
               sourcesDispatch({
                 type: "SWITCHDOC",
                 sourceList:
-                  doc.sources.length > 0 ? doc.sources : singleSourceList,
+                  doc.sources.length > 0
+                    ? doc.sources
+                    : cloneDeep(singleSourceList),
+              });
+              sourcesDispatch({
+                type: "CURR",
+                source:
+                  doc.sources.length > 0
+                    ? doc.sources[0]
+                    : cloneDeep(singleSourceList)[0],
               });
             }}
             value={(currDoc.currDoc && currDoc.currDoc) || null}
@@ -257,7 +262,12 @@ export const BibliographyPage = () => {
               <Select
                 labelId="type"
                 label="Type"
-                onFocus={() => setCurrSource(source)}
+                onFocus={() =>
+                  sourcesDispatch({
+                    type: "CURR",
+                    source: source,
+                  })
+                }
                 value={source.type}
                 onChange={(event) => {
                   changeSourceAttributeValue({
@@ -276,7 +286,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Author"
               value={source.author}
-              onFocus={() => setCurrSource(source)}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -289,9 +304,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Title"
               value={source.title}
-              onFocus={() => {
-                setCurrSource(source);
-              }}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -306,9 +324,12 @@ export const BibliographyPage = () => {
                 label="Date Published"
                 disableFuture
                 value={source.pubDate}
-                onFocus={() => {
-                  setCurrSource(source);
-                }}
+                onFocus={() =>
+                  sourcesDispatch({
+                    type: "CURR",
+                    source: source,
+                  })
+                }
                 onChange={(date) => {
                   changeSourceAttributeValue({
                     index: index,
@@ -323,9 +344,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Publisher/Website"
               value={source.pubName}
-              onFocus={() => {
-                setCurrSource(source);
-              }}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -338,9 +362,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Location/URL"
               value={source.pubLocation}
-              onFocus={() => {
-                setCurrSource(source);
-              }}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -353,9 +380,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Edition/Version"
               value={source.edition}
-              onFocus={() => {
-                setCurrSource(source);
-              }}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -368,9 +398,12 @@ export const BibliographyPage = () => {
             <TextField
               label="Page Numbers"
               value={source.pageNumbers}
-              onFocus={() => {
-                setCurrSource(source);
-              }}
+              onFocus={() =>
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                })
+              }
               onChange={(event) => {
                 changeSourceAttributeValue({
                   index: index,
@@ -382,7 +415,10 @@ export const BibliographyPage = () => {
 
             <IconButton
               onClick={() => {
-                setCurrSource(source);
+                sourcesDispatch({
+                  type: "CURR",
+                  source: source,
+                });
                 deleteSource({ index: index });
               }}
             >

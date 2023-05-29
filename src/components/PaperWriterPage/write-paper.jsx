@@ -36,6 +36,7 @@ export const WritePaper = () => {
 
     currDocDispatch(newDoc);
     currContentDispatch(newDoc.content);
+    sourcesDispatch({ type: "SWITCHDOC", sourceList: singleSourceList });
     setInput("");
   }
 
