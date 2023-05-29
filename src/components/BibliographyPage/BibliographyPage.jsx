@@ -116,19 +116,34 @@ export const BibliographyPage = () => {
     const url =
       "https://api.openai.com/v1/engines/text-davinci-003/completions";
 
-    let prompt = `Create a bibliography with the following sources: \n`;
+    let prompt =
+      `You are a research assistant and you need to generate` +
+      `an HTML-formatted bibliography following the ${format} style guide` +
+      `please create a bibliography from the following sources`;
 
     for (let ind = 0; ind < sources.sources.length; ind++) {
       const source = sources.sources[ind];
+      prompt += `${source.type}:`;
+      prompt += source.author === "" ? "" : `Author - ${source.author}, `;
+      prompt += source.title === "" ? "" : `Title - ${source.title}, `;
       prompt +=
-        `${source.type} ` +
-        `Author: ${source.author} Title: ${source.title} ` +
-        `Date Published: ${source.pubDate} Publisher/Website: ${source.pubName} ` +
-        `Publisher Location/URL: ${source.pubLocation} Edition: ${source.edition} ` +
-        `Page Numbers: ${source.pageNumbers} \n`;
+        source.pubDate == null ? "" : `Date Published - ${source.pubDate}, `;
+      prompt +=
+        source.pubName === "" ? "" : `Publisher/Website - ${source.pubName}, `;
+      prompt +=
+        source.pubLocation === ""
+          ? ""
+          : `Publisher Location/URL - ${source.pubLocation}, `;
+      prompt += source.edition === "" ? "" : `Edition - ${source.edition}, `;
+      prompt +=
+        source.pageNumbers === ""
+          ? ""
+          : `Page Numbers - ${source.pageNumbers} \n`;
     }
 
-    prompt += ` format according to the ${format} format using html styling tags`;
+    prompt +=
+      `please use HTML to style the bibliography` +
+      `and please order the sources by the Author's surname`;
 
     console.log(prompt);
 
