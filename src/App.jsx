@@ -49,19 +49,7 @@ function App() {
   });
 
   const [sources, sourcesDispatch] = useReducer(sourcesReducer, {
-    sources: [
-      {
-        type: "",
-        author: "",
-        title: "",
-        pubDate: null,
-        pubName: "",
-        pubLocation: "",
-        edition: "",
-        pageNumbers: "",
-      },
-    ],
-
+    sources: [],
     currSource: null,
   });
 

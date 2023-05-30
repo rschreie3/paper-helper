@@ -23,19 +23,6 @@ import { SourcesContext } from "../../state/sources/sources-context";
 import { AlertContext } from "../../state/alert/alert-context";
 
 export const BibliographyPage = () => {
-  const singleSourceList = [
-    {
-      type: "",
-      author: "",
-      title: "",
-      pubDate: null,
-      pubName: "",
-      pubLocation: "",
-      edition: "",
-      pageNumbers: "",
-    },
-  ];
-
   const { docsState, docsDispatch } = useContext(DocsContext);
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
@@ -170,9 +157,6 @@ export const BibliographyPage = () => {
     const data = await response.json();
     const stringData = data.choices[0].text;
 
-    // const split = currContent.currContent.split("Bibliography");
-    // const oldBibRemoved = split[0];
-
     const newContent = currContent.currContent + "<br />" + stringData;
 
     const newDoc = {
@@ -217,17 +201,11 @@ export const BibliographyPage = () => {
               currContentDispatch(doc.content);
               sourcesDispatch({
                 type: "SWITCHDOC",
-                sourceList:
-                  doc.sources.length > 0
-                    ? doc.sources
-                    : cloneDeep(singleSourceList),
+                sourceList: doc.sources,
               });
               sourcesDispatch({
                 type: "CURR",
-                source:
-                  doc.sources.length > 0
-                    ? doc.sources[0]
-                    : cloneDeep(singleSourceList)[0],
+                source: doc.sources,
               });
             }}
             value={(currDoc.currDoc && currDoc.currDoc) || null}

@@ -16,7 +16,7 @@ export const WritePaper = () => {
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const [unchanged, setUnchanged] = useState(true);
-  const { sources, sourcesDispatch } = useContext(SourcesContext);
+  const { sourcesDispatch } = useContext(SourcesContext);
 
   const onInput = (event) => {
     setInput(event.target.value);
@@ -26,7 +26,18 @@ export const WritePaper = () => {
     const newDoc = {
       label: input,
       content: "",
-      sources: [],
+      sources: [
+        {
+          type: "Article",
+          author: "",
+          title: "",
+          pubDate: null,
+          pubName: "",
+          pubLocation: "",
+          edition: "",
+          pageNumbers: "",
+        },
+      ],
     };
 
     docsDispatch({
