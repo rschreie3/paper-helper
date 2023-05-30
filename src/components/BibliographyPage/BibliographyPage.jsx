@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import { cloneDeep } from "lodash";
+
 import { Autocomplete, Box, TextField } from "@mui/material";
 import { Stack } from "@mui/material";
 import { Divider } from "@mui/material";
@@ -6,16 +8,19 @@ import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import { DocsContext } from "../../state/docs/docs-context";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
-import { cloneDeep } from "lodash";
+import { Alert, AlertTitle, Collapse } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { DocsContext } from "../../state/docs/docs-context";
 import { ApiContext } from "../../state/apiKey/apiKey-context";
 import { CurrDocContext } from "../../state/currDoc/currDoc-context";
 import { CurrContentContext } from "../../state/currContent/currContent-context";
 import { SourcesContext } from "../../state/sources/sources-context";
+import { AlertContext } from "../../state/alert/alert-context";
 
 export const BibliographyPage = () => {
   const singleSourceList = [
@@ -35,9 +40,11 @@ export const BibliographyPage = () => {
   const { currDoc, currDocDispatch } = useContext(CurrDocContext);
   const { currContent, currContentDispatch } = useContext(CurrContentContext);
   const { sources, sourcesDispatch } = useContext(SourcesContext);
+  const { apiKey } = useContext(ApiContext);
+  const { alerts, alertsDispatch } = useContext(AlertContext);
+
   const [sourcesSaved, setSourcesSaved] = useState(false);
   const [format, setFormat] = useState("MLA");
-  const { apiKey } = useContext(ApiContext);
 
   const addSource = () => {
     const newSource = {
@@ -181,6 +188,7 @@ export const BibliographyPage = () => {
 
     currDocDispatch(newDoc);
     currContentDispatch(newContent);
+    alertsDispatch({ type: "SUCCESS", bool: true });
   };
 
   return (
@@ -266,6 +274,51 @@ export const BibliographyPage = () => {
           >
             Create
           </Button>
+        </Stack>
+        <Stack>
+          <Box>
+            <Collapse in={alerts.successOpen}>
+              <Alert
+                action={
+                  <IconButton
+                    onClick={() => {
+                      alertsDispatch({ type: "SUCCESS", bool: false });
+                      alertsDispatch({ type: "WARNING", bool: true });
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                }
+              >
+                <AlertTitle>
+                  Bibliography has been added to your document!
+                </AlertTitle>
+                This is a preliminary bibliography and may need to be edited,
+                please reference your style guide
+              </Alert>
+            </Collapse>
+          </Box>
+
+          <Box>
+            <Collapse in={alerts.warningOpen}>
+              <Alert
+                severity="warning"
+                action={
+                  <IconButton
+                    onClick={() => {
+                      alertsDispatch({ type: "WARNING", bool: false });
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                }
+              >
+                <AlertTitle>Before re-creating bibliography</AlertTitle>
+                Please note that this will <strong>not</strong> delete the old
+                bibliography
+              </Alert>
+            </Collapse>
+          </Box>
         </Stack>
       </Stack>
 
