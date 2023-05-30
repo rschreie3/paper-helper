@@ -18,6 +18,7 @@ const pages = [
   { name: "Write Paper", path: "/" },
   { name: "Tools", path: "/tools" },
   { name: "Bibliography", path: "/bibliography" },
+  { name: "API Key", path: "/apikey" },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 

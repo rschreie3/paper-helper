@@ -13,13 +13,15 @@ import { CurrDocReducer } from "./state/currDoc/currDoc-reducer";
 import { CurrDocContext } from "./state/currDoc/currDoc-context";
 import { CurrContentReducer } from "./state/currContent/currContent-reducer";
 import { CurrContentContext } from "./state/currContent/currContent-context";
-import { SecretPage } from "./mySecretPage/apiKeyInput";
+import { SecretPage } from "./components/mySecretPage/apiKeyInput";
 import { apiKeyReducer } from "./state/apiKey/apiKey-reducer";
 import { ApiContext } from "./state/apiKey/apiKey-context";
 import { sourcesReducer } from "./state/sources/sources-reducer";
 import { SourcesContext } from "./state/sources/sources-context";
 import { toolsContentReducer } from "./state/toolsPage/tools-content-reducer";
 import { ToolsContentContext } from "./state/toolsPage/tools-content-context";
+import { alertReducer } from "./state/alert/alert-reducer";
+import { AlertContext } from "./state/alert/alert-context";
 
 const theme = createTheme({
   palette: {
@@ -63,6 +65,11 @@ function App() {
     currSource: null,
   });
 
+  const [alerts, alertsDispatch] = useReducer(alertReducer, {
+    sucessOpen: false,
+    warningOpen: false,
+  });
+
   const [toolsContent, toolsContentDispatch] = useReducer(toolsContentReducer, {
     input: "",
     response: "",
@@ -82,15 +89,17 @@ function App() {
                   <ToolsContentContext.Provider
                     value={{ toolsContent, toolsContentDispatch }}
                   >
-                    <Routes>
-                      <Route path="/" element={<WritePaper />} />
-                      <Route path="/tools" element={<Tools />} />
-                      <Route
-                        path="/bibliography"
-                        element={<BibliographyPage />}
-                      />
-                      <Route path="/secret-page" element={<SecretPage />} />
-                    </Routes>
+                    <AlertContext.Provider value={{ alerts, alertsDispatch }}>
+                      <Routes>
+                        <Route path="/" element={<WritePaper />} />
+                        <Route path="/tools" element={<Tools />} />
+                        <Route
+                          path="/bibliography"
+                          element={<BibliographyPage />}
+                        />
+                        <Route path="/apikey" element={<SecretPage />} />
+                      </Routes>
+                    </AlertContext.Provider>
                   </ToolsContentContext.Provider>
                 </SourcesContext.Provider>
               </ApiContext.Provider>
